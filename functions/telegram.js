@@ -15,6 +15,19 @@ const sendMessage = async (apartment) => {
     await bot.sendPhoto(CHAT_ID, apartment['medium_image_url'], extraParams);
 }
 
+const sendUpdatedStatus = async (status) => {
+    let message;
+    if (status === 'success') {
+        message = 'Fetching restored to successful state! 🙂💪';
+    } else if (status === 'error') {
+        message = 'Fetching started failing! 🔥🔥🔥';
+    } else {
+        message = `Unknown status: ${status}`;
+    }
+    await bot.sendMessage(CHAT_ID, message);
+}
+
 module.exports = {
-    sendMessage
+    sendMessage,
+    sendUpdatedStatus
 }

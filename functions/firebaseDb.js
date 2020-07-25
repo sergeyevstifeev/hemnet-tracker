@@ -11,19 +11,20 @@ const saveApartment = (apartment) => {
             const apartmentRef = db.ref(`apartments/${id}`);
 
             await apartmentRef.set(apartment);
-            logger.info('Saved apartment with id:', id);
+            logger.info('Saved apartment', { id });
         }
     });
 }
 
-const saveLastSuccess = async (timestamp) => {
-    const lastSuccessRef = db.ref(`hemnet/lastSuccess`);
+const saveLastStatus = async (timestamp, status) => {
+    const lastStatusRef = db.ref(`hemnet/lastStatus`);
+    const statusRecord = { timestamp, status };
 
-    await lastSuccessRef.set(timestamp);
-    logger.info('Saved last success:', timestamp);
+    await lastStatusRef.set(statusRecord);
+    logger.info('Saved last status', statusRecord);
 }
 
 module.exports = {
     saveApartment,
-    saveLastSuccess
+    saveLastStatus
 }
