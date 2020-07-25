@@ -9,7 +9,7 @@ const telegram = require('./telegram');
 const REGION = 'europe-west1';
 const logger = functions.logger;
 
-const scheduledFunction = functions.region(REGION).pubsub.schedule('every 5 minutes').onRun(async (context) => {
+const fetchApartments = functions.region(REGION).pubsub.schedule('every 5 minutes').onRun(async (context) => {
     logger.debug('Context', context);
     try {
         const hemnetResponse = await hemnetCrawler.fetchData();
@@ -43,7 +43,7 @@ const notifyOfStatusChange = functions.region(REGION).database.ref('hemnet/lastS
 });
 
 module.exports = {
-    scheduledFunction,
+    fetchApartments,
     notifyOfNewApartmentsFunction,
     notifyOfStatusChange
 }
