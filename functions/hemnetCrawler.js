@@ -8,7 +8,7 @@ const fetchData = async (timestamp) => {
     const cookie = hemnetConfig.cookie;
     const response = await axios.get(SEARCH_URL, {
         headers: {
-            cookie
+            'Cookie': cookie
         }
     });
     return response;
