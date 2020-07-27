@@ -7,9 +7,14 @@ const BOT_API_KEY = telegramConfig.bot_api_key;
 
 const bot = new Slimbot(BOT_API_KEY);
 
+const ESCAPED_CHARS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+const escapeMarkdownText = (text) => {
+    return ESCAPED_CHARS.reduce((acc, curEscapeChar) => acc.replace(new RegExp(`\\${curEscapeChar}`, 'g'), '\\$&'), text);
+}
+
 const sendMessage = async (apartment) => {
     const extraParams = {
-        caption: `[${apartment['address']}](${apartment['url']})\nLocation: ${apartment['locations_string']}\nPrice: *${apartment['price']}*\nAvgift: *${apartment['fee']}*`,
+        caption: `[${escapeMarkdownText(apartment['address'])}](${escapeMarkdownText(apartment['url'])})\nLocation: ${escapeMarkdownText(apartment['locations_string'])}\nPrice: *${escapeMarkdownText(apartment['price'])}*\nAvgift: *${escapeMarkdownText(apartment['fee'])}*`,
         parse_mode: 'MarkdownV2',
     };
     await bot.sendPhoto(CHAT_ID, apartment['medium_image_url'], extraParams);
