@@ -30,6 +30,11 @@ const fetchApartments = functions.region(REGION).pubsub.schedule('every 5 minute
     }
 });
 
+// Apparently the API resource used in fetchApartments gets stale if the original subscription query is not invoked
+const refreshFetchAPI = functions.region(REGION).pubsub.schedule('every 1 hours').onRun(async () => {
+    await hemnetCrawler.fetchSubscriptionPage();
+});
+
 const notifyOfNewApartmentsFunction = functions.region(REGION).database.ref('apartments/{apartmentId}').onCreate(async (snap, context) => {
     const apartment = snap.val();
     logger.info('Apartment has been created', { id: apartment.id });
@@ -44,6 +49,7 @@ const notifyOfStatusChange = functions.region(REGION).database.ref('hemnet/lastS
 
 module.exports = {
     fetchApartments,
+    refreshFetchAPI,
     notifyOfNewApartmentsFunction,
     notifyOfStatusChange
 }
